@@ -1,8 +1,8 @@
 from scipy.ndimage import imread
 from scipy.misc import imsave
 import numpy as np
-import CompressImage as cs
-import Reconstruction as recon
+import compressimage as cs
+import reconstruction as recon
 
 def main():
     #Read in image
@@ -11,17 +11,17 @@ def main():
     num_cols = img.shape[1]
     dim = img.shape[2]
     bs = 16
-    subrate = .1
+    subrate = .2
     lambduh = 12
-    y1, Phi1 = cs.CompressImage(img[:,:,0], bs, subrate)
-    y2, Phi2 = cs.CompressImage(img[:,:,1], bs, subrate)
-    y3, Phi3 = cs.CompressImage(img[:,:,2], bs, subrate)
-    reconstructedImg = np.zeros(img.shape)
+    y1, phi1 = cs.compress_image(img[:,:,0], bs, subrate)
+    y2, phi2 = cs.compress_image(img[:,:,1], bs, subrate)
+    y3, phi3 = cs.compress_image(img[:,:,2], bs, subrate)
+    reconstructed_img = np.zeros(img.shape)
     print "Reconstructing channel 1..."
-    reconstructedImg[:,:,0] = recon.Reconstruction(y1, Phi1, bs, num_rows, num_cols, lambduh)
-    reconstructedImg[:,:,1] = recon.Reconstruction(y2, Phi2, bs, num_rows, num_cols, lambduh)
-    reconstructedImg[:,:,2] = recon.Reconstruction(y3, Phi3, bs, num_rows, num_cols, lambduh)
-    imsave("reconstructed.png", reconstructedImg)
+    reconstructed_img[:,:,0] = recon.reconstruction(y1, phi1, bs, num_rows, num_cols, lambduh)
+    reconstructed_img[:,:,1] = recon.reconstruction(y2, phi2, bs, num_rows, num_cols, lambduh)
+    reconstructed_img[:,:,2] = recon.reconstruction(y3, phi3, bs, num_rows, num_cols, lambduh)
+    imsave("reconstructed.png", reconstructed_img)
 
 
 main()
