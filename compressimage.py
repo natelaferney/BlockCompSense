@@ -18,9 +18,9 @@ import numpy as np
 def im2col(image, bs):
    width = int(len(image[1,:])/bs)
    height = int(len(image[:,1])/bs)
-   totbl = width*height
+   total_blocks = width*height
    k=0
-   retim =np.zeros([bs*bs, totbl]) 
+   retim = np.zeros([bs*bs, total_blocks]) 
    for i in  range(0, height):
        for j in range(0, width):
             retim[:, k] = image[i*bs:(i+1)*bs, j*bs:(j+1)*bs].ravel()	
@@ -28,8 +28,8 @@ def im2col(image, bs):
    return retim
    
 def col2im(retim, bs, iw, ih):
-    width=int(iw/bs)
-    height=int(ih/bs)
+    width = int(iw/bs)
+    height = int(ih/bs)
     image = np.zeros([ih, iw])   
     k=0
     for i in  range(0, height):
@@ -38,8 +38,7 @@ def col2im(retim, bs, iw, ih):
             k+=1
     return image
    
-def get_CS_matrix(bs, subrate):
-    n = bs*bs
+def get_CS_matrix(n, subrate):
     A = np.random.randn(n, n)
     U,S,V = np.linalg.svd(A, full_matrices=1)     
     m = int(round(subrate*n))
@@ -47,7 +46,7 @@ def get_CS_matrix(bs, subrate):
     return phi
 
 def compress_image(image, bs, subrate):
-    phi = get_CS_matrix(bs, subrate)
+    phi = get_CS_matrix(bs*bs, subrate)
     return np.dot(phi, im2col(image, bs)), phi
 
 

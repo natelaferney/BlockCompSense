@@ -6,7 +6,6 @@ Created on Mon Nov 21 23:00:58 2016
 """
 import numpy as np
 from scipy.signal import wiener
-import pywt
 from scipy.stats import threshold
 from scipy.fftpack import dct, idct
 from compressimage import col2im, im2col
@@ -14,7 +13,7 @@ from compressimage import col2im, im2col
     
 def reconstruction(y, phi, bs, num_rows, num_cols, lambduh):
     
-    tol = .001
+    tol = .1
     d_Prev = 0
     num_factor = 0
     max_iterations = 300
@@ -41,7 +40,8 @@ def reconstruction(y, phi, bs, num_rows, num_cols, lambduh):
             num_factor += 1
         d_Prev = d
         
-        print(i)
+        if i % 20 == 0:
+            print(i)
         
 
     return col2im(x0, bs, num_cols, num_rows)
